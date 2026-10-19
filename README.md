@@ -21,7 +21,7 @@ CSV (dirty) ──► Python: extract + clean ──► PostgreSQL staging ─�
 ## Quick start
 
 ```bash
-git clone https://github.com/<your-user>/ecommerce-etl-pipeline.git
+git clone https://github.com/norchahamza/ecommerce-etl-pipeline.git
 cd ecommerce-etl-pipeline
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
