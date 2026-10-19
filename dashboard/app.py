@@ -1,10 +1,88 @@
+import abc
 import os
 
 import pandas as pd
 import plotly.express as px
-import streamlit as st
+import streamlit as _streamlit
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
+
+
+class StreamlitAPI(abc.ABC):
+    @staticmethod
+    @abc.abstractmethod
+    def set_page_config(*args, **kwargs):
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def title(*args, **kwargs):
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def cache_data(*args, **kwargs):
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def columns(*args, **kwargs):
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def metric(*args, **kwargs):
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def subheader(*args, **kwargs):
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def plotly_chart(*args, **kwargs):
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def dataframe(*args, **kwargs):
+        raise NotImplementedError
+
+
+class st(StreamlitAPI):
+    @staticmethod
+    def set_page_config(*args, **kwargs):
+        return _streamlit.set_page_config(*args, **kwargs)
+
+    @staticmethod
+    def title(*args, **kwargs):
+        return _streamlit.title(*args, **kwargs)
+
+    @staticmethod
+    def cache_data(*args, **kwargs):
+        return _streamlit.cache_data(*args, **kwargs)
+
+    @staticmethod
+    def columns(*args, **kwargs):
+        return _streamlit.columns(*args, **kwargs)
+
+    @staticmethod
+    def metric(*args, **kwargs):
+        return _streamlit.metric(*args, **kwargs)
+
+    @staticmethod
+    def subheader(*args, **kwargs):
+        return _streamlit.subheader(*args, **kwargs)
+
+    @staticmethod
+    def plotly_chart(*args, **kwargs):
+        return _streamlit.plotly_chart(*args, **kwargs)
+
+    @staticmethod
+    def dataframe(*args, **kwargs):
+        return _streamlit.dataframe(*args, **kwargs)
+
 
 load_dotenv()
 DB_URL = os.getenv("DATABASE_URL",
@@ -29,24 +107,24 @@ c3.metric("Avg order value", f"{monthly['revenue'].sum() / monthly['orders'].sum
 c4.metric("Active customers", f"{len(rfm):,}")
 
 st.subheader("Monthly revenue")
-st.plotly_chart(px.line(monthly, x="month", y="revenue", markers=True), use_container_width=True)
+st.plotly_chart(px.line(monthly, x="month", y="revenue", markers=True), width="stretch")
 
 left, right = st.columns(2)
 with left:
     st.subheader("Revenue by category")
     st.plotly_chart(px.pie(q("SELECT * FROM dw.v_category_revenue"),
-                           names="category", values="revenue"), use_container_width=True)
+                           names="category", values="revenue"), width="stretch")
 with right:
     st.subheader("Revenue by country")
     st.plotly_chart(px.bar(q("SELECT * FROM dw.v_country_revenue ORDER BY revenue DESC"),
-                           x="country", y="revenue"), use_container_width=True)
+                           x="country", y="revenue"), width="stretch")
 
 st.subheader("Top 10 products")
 st.dataframe(q("SELECT * FROM dw.v_top_products ORDER BY revenue_rank LIMIT 10"),
-             use_container_width=True)
+             width="stretch")
 
 st.subheader("Customer segments (RFM)")
 seg = rfm.groupby("segment", as_index=False).agg(customers=("customer_key", "count"),
                                                  revenue=("monetary", "sum"))
 st.plotly_chart(px.bar(seg, x="segment", y="customers", color="segment"),
-                use_container_width=True)
+                width="stretch")
