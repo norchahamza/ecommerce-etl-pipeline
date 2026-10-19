@@ -1,88 +1,10 @@
-import abc
 import os
 
 import pandas as pd
 import plotly.express as px
-import streamlit as _streamlit
+import streamlit as st
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-
-
-class StreamlitAPI(abc.ABC):
-    @staticmethod
-    @abc.abstractmethod
-    def set_page_config(*args, **kwargs):
-        raise NotImplementedError
-
-    @staticmethod
-    @abc.abstractmethod
-    def title(*args, **kwargs):
-        raise NotImplementedError
-
-    @staticmethod
-    @abc.abstractmethod
-    def cache_data(*args, **kwargs):
-        raise NotImplementedError
-
-    @staticmethod
-    @abc.abstractmethod
-    def columns(*args, **kwargs):
-        raise NotImplementedError
-
-    @staticmethod
-    @abc.abstractmethod
-    def metric(*args, **kwargs):
-        raise NotImplementedError
-
-    @staticmethod
-    @abc.abstractmethod
-    def subheader(*args, **kwargs):
-        raise NotImplementedError
-
-    @staticmethod
-    @abc.abstractmethod
-    def plotly_chart(*args, **kwargs):
-        raise NotImplementedError
-
-    @staticmethod
-    @abc.abstractmethod
-    def dataframe(*args, **kwargs):
-        raise NotImplementedError
-
-
-class st(StreamlitAPI):
-    @staticmethod
-    def set_page_config(*args, **kwargs):
-        return _streamlit.set_page_config(*args, **kwargs)
-
-    @staticmethod
-    def title(*args, **kwargs):
-        return _streamlit.title(*args, **kwargs)
-
-    @staticmethod
-    def cache_data(*args, **kwargs):
-        return _streamlit.cache_data(*args, **kwargs)
-
-    @staticmethod
-    def columns(*args, **kwargs):
-        return _streamlit.columns(*args, **kwargs)
-
-    @staticmethod
-    def metric(*args, **kwargs):
-        return _streamlit.metric(*args, **kwargs)
-
-    @staticmethod
-    def subheader(*args, **kwargs):
-        return _streamlit.subheader(*args, **kwargs)
-
-    @staticmethod
-    def plotly_chart(*args, **kwargs):
-        return _streamlit.plotly_chart(*args, **kwargs)
-
-    @staticmethod
-    def dataframe(*args, **kwargs):
-        return _streamlit.dataframe(*args, **kwargs)
-
 
 load_dotenv()
 DB_URL = os.getenv("DATABASE_URL",
